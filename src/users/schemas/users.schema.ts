@@ -15,8 +15,14 @@ export class User {
   @Prop({ required: true })
   description: string;
 
+  // @Prop({ required: true })
+  // price: number;
+
   @Prop({ required: true })
-  price: number;
+  title: string;
+
+  @Prop()
+  birthday: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

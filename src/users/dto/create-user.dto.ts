@@ -18,6 +18,10 @@ export class CreateUserDto {
   @MaxLength(300)
   description: string;
 
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
   // @IsNumber()
   // @IsNotEmpty()
   // price: number;
