@@ -46,6 +46,31 @@ export class UsersService {
     }
   }
 
+  async updatePassword(
+    user: User,
+    currentPassword: string,
+    newPassword: string,
+  ): Promise<User | HttpException> {
+    try {
+      const User = await this.userModel.findById(user._id);
+      if (await bcrypt.compare(currentPassword, User.password)) {
+        if (await bcrypt.compare(newPassword, User.password))
+          return new HttpException(
+            "you've enter the same password",
+            HttpStatus.EXPECTATION_FAILED,
+          );
+        User.password = await bcrypt.hash(newPassword, 10);
+        return await new this.userModel(User).save();
+      }
+      return new HttpException(
+        'Wrong password entered',
+        HttpStatus.EXPECTATION_FAILED,
+      );
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.EXPECTATION_FAILED);
+    }
+  }
+
   async findAll(): Promise<UserDocument[]> {
     return this.userModel.find();
   }

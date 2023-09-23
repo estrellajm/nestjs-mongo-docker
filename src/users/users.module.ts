@@ -17,7 +17,7 @@ import { JwtStrategy } from './jwt/jwt.strategy';
 
     JwtModule.register({
       secret: 'reallyDifficult',
-      signOptions: { expiresIn: '24h' },
+      signOptions: { expiresIn: '60m' }, // Token expiration time
     }),
   ],
   controllers: [UsersController],
