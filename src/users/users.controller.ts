@@ -10,6 +10,7 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { log } from 'console';
 
 @Controller('users')
 export class UsersController {
@@ -35,8 +36,13 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @Delete(':id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
+  }
+
+  @Delete('delete')
+  async deleteMultiple(@Body('ids') ids: string[]): Promise<void> {
+    await this.usersService.deleteMultiple(ids);
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -35,6 +35,18 @@ export class UsersService {
   }
 
   async remove(id: string) {
-    return this.userModel.findByIdAndRemove(id);
+    try {
+      return this.userModel.findByIdAndRemove(id);
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.EXPECTATION_FAILED);
+    }
+  }
+
+  async deleteMultiple(ids: string[]): Promise<void> {
+    try {
+      await this.userModel.deleteMany({ _id: { $in: ids } });
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.EXPECTATION_FAILED);
+    }
   }
 }
