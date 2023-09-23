@@ -76,20 +76,11 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<UserDocument> {
-    const entity = await this.userModel.findById(id).exec();
-    if (!entity) {
-      throw new HttpException(
-        `Entity with id ${id} not found`,
-        HttpStatus.EXPECTATION_FAILED,
-      );
+    try {
+      return this.userModel.findById(id);
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.EXPECTATION_FAILED);
     }
-    return entity;
-
-    // try {
-    //   return this.userModel.findById(id);
-    // } catch (error) {
-    //   throw new HttpException(error, HttpStatus.EXPECTATION_FAILED);
-    // }
   }
 
   async update(
