@@ -4,18 +4,45 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/users.schema';
+import * as bcrypt from 'bcryptjs';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UsersService {
   constructor(
+    private jwtService: JwtService,
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<UserDocument> {
+  async createUser(createUser: CreateUserDto) {
     try {
-      return await new this.userModel(createUserDto).save();
-    } catch (err) {
-      return err;
+      const isUser = await this.userModel.findOne({
+        email: createUser.email,
+      });
+      if (isUser)
+        throw new HttpException(
+          'User already exist, try resetting your password',
+          HttpStatus.CONFLICT,
+        );
+      createUser.password = await bcrypt
+        .hash(createUser.password, 10)
+        .then((r: string) => r);
+      return await new this.userModel(createUser).save();
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async login(email: string, password: string) {
+    try {
+      const user = await this.userModel.findOne({
+        email: email,
+      });
+      return user && (await bcrypt.compare(password, user.password))
+        ? await this.jwtService.signAsync({ email, _id: user._id })
+        : new HttpException('UNAUTHORIZED', HttpStatus.UNAUTHORIZED);
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.FORBIDDEN);
     }
   }
 
