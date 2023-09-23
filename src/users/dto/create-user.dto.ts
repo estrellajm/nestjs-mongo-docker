@@ -1,7 +1,7 @@
 import {
   IsNotEmpty,
   IsString,
-  IsNumber,
+  // IsNumber,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -18,7 +18,7 @@ export class CreateUserDto {
   @MaxLength(300)
   description: string;
 
-  @IsNumber()
-  @IsNotEmpty()
-  price: number;
+  // @IsNumber()
+  // @IsNotEmpty()
+  // price: number;
 }
