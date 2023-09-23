@@ -6,10 +6,9 @@ import {
   MinLength,
 } from 'class-validator';
 import { iUser } from '../entities/users.interface';
-import { Types } from 'mongoose';
 
 export class CreateUserDto implements iUser {
-  _id: Types.ObjectId;
+  _id: string;
 
   @IsString()
   @IsNotEmpty()

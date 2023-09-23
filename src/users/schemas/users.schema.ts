@@ -1,7 +1,7 @@
 // src/schemas/user.schema.ts
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document } from 'mongoose';
 import { iUser } from '../entities/users.interface';
 
 export type UserDocument = User & Document;
@@ -10,8 +10,7 @@ export type UserDocument = User & Document;
   timestamps: { createdAt: 'created', updatedAt: 'updated' },
 })
 export class User implements iUser {
-  @Prop()
-  _id: Types.ObjectId;
+  _id: string;
 
   @Prop({ required: true })
   name: string;

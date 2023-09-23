@@ -1,8 +1,7 @@
-import { Types } from 'mongoose';
 import { iUser } from './users.interface';
 
 export class User implements iUser {
-  _id: Types.ObjectId;
+  _id: string;
   name: string;
   password: string;
   email: string;
