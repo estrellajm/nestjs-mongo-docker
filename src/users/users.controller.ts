@@ -29,13 +29,13 @@ export class UsersController {
 
   /** TODO: resetPassword() */
 
-  @Get('getUser/:id')
+  @Get(':id')
   @UseGuards(AuthGuard('jwt'))
   async findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
 
-  @Get('getAll')
+  @Get()
   @UseGuards(AuthGuard('jwt'))
   findAll() {
     return this.usersService.findAll();
