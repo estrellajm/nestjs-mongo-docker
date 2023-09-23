@@ -1,6 +1,4 @@
-import { iUser } from './users.interface';
-
-export class User implements iUser {
+export interface iUser {
   _id: string;
   name: string;
   password: string;

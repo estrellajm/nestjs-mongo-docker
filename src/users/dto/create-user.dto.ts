@@ -5,8 +5,11 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { iUser } from '../entities/users.interface';
 
-export class CreateUserDto {
+export class CreateUserDto implements iUser {
+  _id: string;
+
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
@@ -21,6 +24,17 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   title: string;
+
+  @IsString()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+
+  created: Date;
+  updated: Date;
 
   // @IsNumber()
   // @IsNotEmpty()

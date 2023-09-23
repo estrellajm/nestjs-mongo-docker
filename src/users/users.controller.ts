@@ -6,11 +6,12 @@ import {
   Param,
   Delete,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { log } from 'console';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
@@ -18,31 +19,43 @@ export class UsersController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    return this.usersService.createUser(createUserDto);
   }
 
-  @Get()
+  @Get('login')
+  login(@Body('email') email: string, @Body('password') password: string) {
+    return this.usersService.login(email, password);
+  }
+
+  /** TODO: resetPassword() */
+
+  @Get('getUser/:id')
+  @UseGuards(AuthGuard('jwt'))
+  async findOne(@Param('id') id: string) {
+    return this.usersService.findOne(id);
+  }
+
+  @Get('getAll')
+  @UseGuards(AuthGuard('jwt'))
   findAll() {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
-  }
-
   @Put(':id')
+  @UseGuards(AuthGuard('jwt'))
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @Delete('delete/:id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
-  }
-
-  @Delete('delete')
+  @Delete('deleteMultiple')
+  @UseGuards(AuthGuard('jwt'))
   async deleteMultiple(@Body('ids') ids: string[]): Promise<void> {
     await this.usersService.deleteMultiple(ids);
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
+  remove(@Param('id') id: string) {
+    return this.usersService.remove(id);
   }
 }
