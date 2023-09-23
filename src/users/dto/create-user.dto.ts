@@ -6,7 +6,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class CreateMenuDto {
+export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(5)

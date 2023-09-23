@@ -1,14 +1,14 @@
-// src/schemas/menu.schema.ts
+// src/schemas/user.schema.ts
 
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type MenuDocument = Menu & Document;
+export type UserDocument = User & Document;
 
 @Schema({
   timestamps: { createdAt: 'created', updatedAt: 'updated' },
 })
-export class Menu {
+export class User {
   @Prop({ required: true })
   name: string;
 
@@ -19,4 +19,4 @@ export class Menu {
   price: number;
 }
 
-export const MenuSchema = SchemaFactory.createForClass(Menu);
+export const UserSchema = SchemaFactory.createForClass(User);
